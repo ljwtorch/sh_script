@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 # 设置mysql变量
 container_name="mysql"
 mysql_user="root"
