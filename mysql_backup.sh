@@ -19,7 +19,7 @@ docker exec $container_name mysqldump -h$mysql_host -P$mysql_port -u$mysql_user 
 # 删除指定天数前的备份文件
 if [ "$delete_old_backup" == "true" ]
 then
-    `find $backup_dir -type f -ctime +$backup_days | xargs sudo rm -r`
+    `find $backup_dir -type f -ctime +$backup_days | xargs rm -r`
 fi
 
 # crontab
