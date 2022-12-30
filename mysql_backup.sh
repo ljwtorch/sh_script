@@ -9,14 +9,18 @@ mysql_database="wordpress"
 backup_dir="/home/torch/backup_all/mysql_backup"
 
 # 是否删除旧数据
-backup_old_delete="true"
-backup_days=7
+delete_old_backup="true"
+backup_days=3
 backup_time=`date +%Y%m%d%H%M`
 
-#docker exec $container_name mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password $mysql_database > /home/backup-$mysql_database-$backup_time.sql
+# 运行备份指令
 docker exec $container_name mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password $mysql_database > "$backup_dir"/"backup-$mysql_database-$backup_time.sql"
-#docker exec $container_name mysqldump -h$mysql_host -P$mysql_port -u$mysql_user -p$mysql_password $mysql_database > ${backup_dir}/backup-${mysql_database}-${backup_time}.sql
-# 拷贝到主机内
-#docker cp $container_name:/home/backup-$mysql_database-$backup_time.sql $backup_dir
-# 删除容器内备份
-#docker exec mysql rm /home/backup-$mysql_database-$backup_time.sql
+
+# 删除指定天数前的备份文件
+if [ "$delete_old_backup" == "true" ]
+then
+    `find $backup_dir -type f -ctime +$backup_days | xargs sudo rm -r`
+fi
+
+# crontab
+# 0 2 * * * /home/torch/software/sh_script/mysql_backup.sh
