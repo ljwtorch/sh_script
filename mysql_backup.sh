@@ -19,3 +19,4 @@ docker exec $container_name mysqldump -h$mysql_host -P$mysql_port -u$mysql_user 
 #docker cp $container_name:/home/backup-$mysql_database-$backup_time.sql $backup_dir
 # 删除容器内备份
 #docker exec mysql rm /home/backup-$mysql_database-$backup_time.sql
+
