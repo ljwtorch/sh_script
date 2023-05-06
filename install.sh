@@ -50,10 +50,16 @@ function k8s_uninstall() {
 }
 
 function k8s_tab() {
-    sudo apt-get install bash-completion
-    echo "source <(kubectl completion bash)" >> ~/.bashrc
-    source ~/.bashrc
-    cat ~/.bashrc
+  sudo apt-get install bash-completion
+  echo "source <(kubectl completion bash)" >> ~/.bashrc
+  source ~/.bashrc
+  cat ~/.bashrc
+  echo "已经添加 k8s 指令补全"
+}
+
+function helm_tab() {
+  source <(helm completion bash)
+  echo "已经添加 helm 指令补全"
 }
 
 echo "请选择要执行的操作："
@@ -62,6 +68,7 @@ echo "2. 安装 Docker Engine"
 echo "3. 安装 kubeadm kubectl kubelet"
 echo "4. 卸载 kubeadm kubectl kubelet"
 echo "5. 增加 k8s 自动补全功能"
+echo "6. 增加 helm 自动补全功能"
 read choice
 
 case $choice in
@@ -79,6 +86,9 @@ case $choice in
     ;;
   5)
     k8s_tab
+    ;;
+  6)
+    helm_tab
     ;;
   *)
     echo "无效的选项"
