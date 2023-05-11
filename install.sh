@@ -62,6 +62,38 @@ function helm_tab() {
   echo "已经添加 helm 指令补全"
 }
 
+function adduser() {
+# check if user is root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root"
+   exit 1
+fi
+
+# check if user already exists
+if id "sonkwo" >/dev/null 2>&1; then
+    echo "User sonkwo already exists"
+    exit 1
+fi
+
+# create user on Debian
+if [[ $(uname) == "Linux" ]] && [[ $(awk -F= '/^NAME/{print $2}' /etc/os-release) == "Debian" ]]; then
+   adduser --disabled-password --gecos "" sonkwo
+   echo "User sonkwo created"
+   exit 0
+fi
+
+# create user on CentOS
+if [[ $(uname) == "Linux" ]] && [[ $(awk -F= '/^NAME/{print $2}' /etc/os-release) =~ "CentOS" ]]; then
+   useradd sonkwo
+   echo "User sonkwo created"
+   exit 0
+fi
+
+# print error message if unsupported OS
+echo "Unsupported operating system"
+exit 1
+}
+
 echo "请选择要执行的操作："
 echo "1. 更换 Ubuntu 软件源为USTC (首次执行请先执行 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak)"
 echo "2. 安装 Docker Engine"
@@ -69,6 +101,7 @@ echo "3. 安装 kubeadm kubectl kubelet"
 echo "4. 卸载 kubeadm kubectl kubelet"
 echo "5. 增加 k8s 自动补全功能"
 echo "6. 增加 helm 自动补全功能"
+echo "7. 增加 sonkwo 普通用户"
 read choice
 
 case $choice in
