@@ -94,6 +94,11 @@ echo "Unsupported operating system"
 exit 1
 }
 
+function aliasll() {
+  echo "alias ll='ls -alh'" >> ~/.bashrc
+  source ~/.bashrc
+}
+
 echo "请选择要执行的操作："
 echo "1. 更换 Ubuntu 软件源为USTC (首次执行请先执行 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak)"
 echo "2. 安装 Docker Engine"
@@ -102,6 +107,7 @@ echo "4. 卸载 kubeadm kubectl kubelet"
 echo "5. 增加 k8s 自动补全功能"
 echo "6. 增加 helm 自动补全功能"
 echo "7. 增加 sonkwo 普通用户"
+echo "8. 增加 alias ll='ls -alh'"
 read choice
 
 case $choice in
@@ -122,6 +128,9 @@ case $choice in
     ;;
   6)
     helm_tab
+    ;;
+  8)
+    aliasll
     ;;
   *)
     echo "无效的选项"
