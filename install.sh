@@ -99,6 +99,11 @@ function aliasll() {
   source ~/.bashrc
 }
 
+function speedTest() {
+  sudo apt update
+  sudo apt install iperf3 -y
+}
+
 echo "请选择要执行的操作："
 echo "1. 更换 Ubuntu 软件源为USTC (首次执行请先执行 sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak)"
 echo "2. 安装 Docker Engine"
@@ -131,6 +136,9 @@ case $choice in
     ;;
   8)
     aliasll
+    ;;
+  9)
+    speedTest
     ;;
   *)
     echo "无效的选项"
