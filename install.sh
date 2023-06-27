@@ -113,6 +113,7 @@ echo "5. 增加 k8s 自动补全功能"
 echo "6. 增加 helm 自动补全功能"
 echo "7. 增加 sonkwo 普通用户"
 echo "8. 增加 alias ll='ls -alh'"
+echo "9. 增加 iperf3 内网测速工具"
 read choice
 
 case $choice in
