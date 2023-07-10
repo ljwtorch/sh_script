@@ -1,14 +1,14 @@
 #!/bin/bash
 
 function replace_source_ubuntu() {
-  echo "备份原镜像源："
+  read -p "备份原镜像源, Press Enter to continue..."
   sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
   sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list
   sudo apt-get update
 }
 
 function replace_source_debian() {
-  echo "备份原镜像源："
+  read -p "备份原镜像源, Press Enter to continue..."
   sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
   sudo sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
   sudo apt-get update
