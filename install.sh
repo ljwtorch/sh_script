@@ -15,30 +15,39 @@ function replace_source_debian() {
 }
 
 function install_docker() {
-  echo "Update the apt package index and install packages to allow apt to use a repository over HTTPS:"
-  sudo apt-get remove docker docker-engine docker.io containerd runc
+  echo "运行以下命令卸载所有冲突的包："
+  read -p "Press Enter to continue..."
+  for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+  echo "更新 apt 软件包索引并安装软件包以允许 apt 通过 HTTPS 使用存储库："
+  read -p "Press Enter to continue..."
   sudo apt-get update
   sudo apt-get install ca-certificates curl gnupg
 
-  echo "Add Docker's official GPG key:"
+  echo "添加 Docker 的官方 GPG 密钥："
+  read -p "Press Enter to continue..."
   sudo install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-  echo "Use the following command to set up the repository:"
+  echo "使用以下命令设置存储库："
+  read -p "Press Enter to continue..."
   echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-  echo '{ "registry-mirrors": ["https://mirror.nju.edu.cn/"] }' | sudo tee /etc/docker/daemon.json
-  sudo systemctl daemon-reload
-  sudo systemctl restart docker.service
-
   echo "Install Docker Engine:"
+  read -p "Press Enter to continue..."
   sudo apt-get update
   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   sudo docker run hello-world
+
+  echo "更换docker默认软件源："
+  read -p "Press Enter to continue..."
+  echo '{ "registry-mirrors": ["https://mirror.nju.edu.cn/"] }' | sudo tee /etc/docker/daemon.json
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker.service
 }
 
 function k8s_install() {
