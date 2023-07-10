@@ -48,8 +48,9 @@ function install_docker() {
   if [ "$compose_judge" == "y" ]; then
     echo "Installing Docker Compose..."
     # 在此处添加安装 Docker Compose 的指令
-    curl -SL https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.19.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
     sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    sudo chmod 777 /usr/local/bin/docker-compose
   else
     echo "Skipping docker-compose installation."
   fi
