@@ -1,33 +1,33 @@
 #!/bin/bash
 
 function replace_source_ubuntu() {
-  read -p "备份原镜像源, Press Enter to continue..."
+  read -p "Starting a backup of the original image source, Press Enter to continue..."
   sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
   sudo sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list
   sudo apt-get update
 }
 
 function replace_source_debian() {
-  read -p "备份原镜像源, Press Enter to continue..."
+  read -p "Starting a backup of the original image source, Press Enter to continue..."
   sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
   sudo sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
   sudo apt-get update
 }
 
 function install_docker() {
-  read -p "运行卸载所有冲突的包, Press Enter to continue..."
+  read -p "Uninstall all conflicting packages, Press Enter to continue..."
   for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
-  read -p "更新 apt 软件包索引并安装软件包以允许 apt 通过 HTTPS 使用存储库："
+  read -p "Update the apt package index and install packages to allow apt to use a repository over HTTPS: "
   sudo apt-get update
   sudo apt-get install ca-certificates curl gnupg
 
-  read -p "添加 Docker 的官方 GPG 密钥, Press Enter to continue..."
+  read -p "Add Docker's official GPG key:, Press Enter to continue..."
   sudo install -m 0755 -d /etc/apt/keyrings
   curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
-  read -p "设置存储库, Press Enter to continue..."
+  read -p "Set up the repository, Press Enter to continue..."
   echo \
   "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
@@ -38,12 +38,12 @@ function install_docker() {
   sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   sudo docker run hello-world
 
-  read -p "更换docker默认软件源, Press Enter to continue..."
+  read -p "Change Docker software source, Press Enter to continue..."
   echo '{ "registry-mirrors": ["https://mirror.nju.edu.cn/"] }' | sudo tee /etc/docker/daemon.json
   sudo systemctl daemon-reload
   sudo systemctl restart docker.service
 
-  read -p "Install Docker Compose Standalone ? (y/n): " compose_judge
+  read -p "Install Docker Compose standalone? (y/n): " compose_judge
   compose_judge=${compose_judge,,}
   if [ "$compose_judge" == "y" ]; then
     echo "Installing Docker Compose..."
@@ -53,6 +53,17 @@ function install_docker() {
     sudo chmod 777 /usr/local/bin/docker-compose
   else
     echo "Skipping docker-compose installation."
+  fi
+
+  read -p "If you want add docker user group? (y/n): " dockergrp_judge
+  dockergrp_judge=${dockergrp_judge,,}
+  if [ "$dockergrp_judge" == "y" ]; then
+    read -p "Type in your username, Press Enter to continue...: " username
+    sudo groupadd docker               
+    sudo gpasswd -a ${username} docker    
+    newgrp docker 
+  else
+    echo "Skipping add docker user group."
   fi
 }
 
