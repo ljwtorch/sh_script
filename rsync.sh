@@ -14,5 +14,6 @@ sudo rsync -av --delete $MYSQL_DIR $BACKUP_PATH
 sudo rsync -av --delete --exclude='alist/alist_data/**' --exclude='*.log' $SOFTWARE_DIR $BACKUP_PATH
 sudo rsync -av --delete --exclude={'*.log','*.flv','*.flv.part'} /home/torch/hdd/biliup $BACKUP_PATH
 sudo rsync -av --delete --exclude={'*.log','*.flv','*.flv.part'} /home/torch/hdd/douyin $BACKUP_PATH
+sudo rsync -av --delete --exclude={'*.log','*.flv','*.flv.part'} /home/torch/hdd/live $BACKUP_PATH
 
 cd /mnt/king/ && sudo tar zcvf rsync.tar.gz rsync/ && sudo cp rsync.tar.gz /mnt/infini/
